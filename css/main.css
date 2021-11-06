@@ -3,6 +3,10 @@ html, body {
     font-family: 'Open Sans', sans-serif;
 }
 
+body {
+    background: #f3f3f3;
+}
+
 .c-text-capitalize {
     text-transform: capitalize;
 }
@@ -15,12 +19,24 @@ html, body {
     flex-direction: row;
 }
 
-.c-f-50 {
-    flex: 0 0 50%;
+.c-col {
+    flex-direction: column;
+}
+
+.c-f-10 {
+    flex: 0 0 10%;
 }
 
 .c-f-25 {
     flex: 0 0 25%;
+}
+
+.c-f-50 {
+    flex: 0 0 50%;
+}
+
+.c-f-75 {
+    flex: 0 0 75%;
 }
 
 .c-f-wrap {
@@ -43,14 +59,20 @@ html, body {
     height: 100%;
 }
 
+.c-w-100 {
+    width: 100%;
+}
+
 #card {
     height: 400px;
     width: 300px;
     padding: 18px;
     border-radius: 8px;
+    box-shadow: 8px 8px 8px 0px #cdcdcd;
 }
 
 #card-content {
+    position: relative;
     height: 100%;
     width: 100%;
     background: white;
@@ -65,4 +87,17 @@ html, body {
     width: 15px;
     border-radius: 30px;
     margin: 0 2px;
+}
+
+#card-header-numeric {
+    margin-right: 5px;
+    color: #686868;
+}
+
+#card-credits {
+    width: 100%;
+    padding: 5px 0;
+    position: absolute;
+    bottom: 0;
+    text-align: center;
 }

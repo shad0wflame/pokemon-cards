@@ -47,16 +47,24 @@ const fetchPokemonAPI = async (endpoint) => {
 }
 
 const parsePokemon = async ({ id, name, stats, sprites, moves, types }) => {
-    const [{move: {url: moveURL}}] = moves;
-    const {name: moveName, type: {name: moveType}, power} = await fetchPokemonAPI(extractEndpoint(moveURL));
+    const moveIndex = getRandomInt(0, moves.length - 1);
+    const {move: {url: moveURL}} = moves[moveIndex];
+    const {
+        name: moveName,
+        type: {name: moveType},
+        power,
+        flavor_text_entries
+    } = await fetchPokemonAPI(extractEndpoint(moveURL));
     const {base_stat: hpStat} = stats.find(({stat:{name}}) => name === "hp");
+
+    const {flavor_text} = flavor_text_entries.find(({language:{name}}) => name === "en");
 
     return {
         id,
         name,
         hp: hpStat,
         sprite: sprites["other"]["official-artwork"]["front_default"],
-        move: { name: parseNames(moveName), type: typesIconColor.get(moveType), power },
+        move: { name: parseNames(moveName), type: typesIconColor.get(moveType), power: power || 0, text: flavor_text },
         types: types.map(({type:{name}}) => typesIconColor.get(name))
     };
 }
@@ -65,32 +73,49 @@ const cardFactory = async (model) => {
     const {id, name, hp, sprite, move, types} = await parsePokemon(model);
     console.log(id, name, hp, sprite, move, types);
 
-    const card = document.createElement("div");
-    card.id = "card";
-
+    let backgroundStyle;
     if (types.length > 1) {
         const colors = types.map(({color}) => (color));
-        card.style.background = `linear-gradient(to right, ${colors.toString()})`
+        backgroundStyle = `linear-gradient(to right, ${colors.toString()})`;
     } else {
-        card.style.background = types[0].color;
+        backgroundStyle = types[0].color;
     }
+
+    const card = document.createElement("div");
+    card.id = "card";
+    card.style.background = backgroundStyle;
 
     const content = document.createElement("div");
     content.id = "card-content";
 
-    const header = document.createElement("div");
-    header.className = "c-flex c-row";
+    const headerRow = document.createElement("div");
+    headerRow.className = "c-flex c-row";
 
-    const nameElement = document.createElement("div");
-    nameElement.className = "c-flex c-align-center c-f-50 c-text-capitalize";
-    nameElement.style.fontSize = "18px";
-    nameElement.style.fontWeight = "600";
-    nameElement.textContent = `#${id} ${name}`;
+    const numericElement = document.createElement("span");
+    numericElement.id = "card-header-numeric";
+    numericElement.textContent = `#${id}`;
+
+    const nameElement = document.createElement("span");
+    nameElement.textContent = `${name}`;
+
+    const nameElementContainer = document.createElement("div");
+    nameElementContainer.className = "c-flex c-align-center c-f-50 c-text-capitalize";
+    nameElementContainer.style.fontSize = "16px";
+    nameElementContainer.style.fontWeight = "600";
+
+    nameElementContainer.append(numericElement, nameElement);
 
     const hpElement = document.createElement("div");
     hpElement.className = "c-flex c-align-center c-justify-end c-f-25";
     hpElement.style.fontSize = "12px";
-    hpElement.textContent = `HP ${hp}`;
+
+    const hpText = document.createElement("span");
+    hpText.style.background = "#d3d3d3";
+    hpText.style.color = "#666";
+    hpText.style.padding = "5px";
+    hpText.textContent = `HP ${hp}`;
+
+    hpElement.appendChild(hpText);
 
     const typesElement = document.createElement("div");
     typesElement.className = "c-flex c-align-center c-justify-end c-f-25";
@@ -104,13 +129,78 @@ const cardFactory = async (model) => {
         return svg;
     }));
 
-    header.append(nameElement, hpElement, typesElement);
+    headerRow.append(nameElementContainer, hpElement, typesElement);
 
-    content.appendChild(header);
+    const portraitRow = document.createElement("div");
+    portraitRow.className = "c-flex c-row";
+    portraitRow.style.padding = "10px 0";
+
+    const portraitContainer = document.createElement("div");
+    portraitContainer.className = "c-flex c-justify-center c-w-100";
+    portraitContainer.style.height = "185px";
+    portraitContainer.style.background = `linear-gradient(to bottom, transparent 0%, white 100%), ${backgroundStyle}`;
+
+    const portrait = document.createElement("img");
+    portrait.src = sprite;
+    portrait.style.width = "auto";
+
+    portraitContainer.appendChild(portrait);
+
+    portraitRow.append(portraitContainer);
+
+    const movementRow = document.createElement("div");
+    movementRow.className = "c-flex c-row";
+
+    const movementType = document.createElement("div");
+    movementType.className = "c-flex c-align-center c-justify-end c-f-10";
+
+    const svg = document.createElement("img");
+    svg.src = move.type.icon;
+    svg.style.background = move.type.color;
+
+    movementType.appendChild(svg);
+
+    const movementNameContainer = document.createElement("div");
+    movementNameContainer.className = "c-flex c-col c-f-75";
+    movementNameContainer.style.paddingLeft = "10px";
+
+    const movementName = document.createElement("div");
+    movementName.className = "c-text-capitalize";
+    movementName.style.fontSize = "16px";
+    movementName.style.fontWeight = "600";
+    movementName.textContent = move.name;
+
+    const movementText = document.createElement("div");
+    movementText.style.paddingTop = "5px";
+    movementText.style.fontSize = "12px";
+    movementText.style.color = "#686868";
+    movementText.textContent = move.text;
+
+    movementNameContainer.append(movementName, movementText);
+
+    const movementPower = document.createElement("div");
+    movementPower.className = "c-flex c-align-center c-justify-end c-f-10";
+    movementPower.style.fontWeight = "600";
+    movementPower.textContent = `${move.power}`;
+
+    movementRow.append(movementType, movementNameContainer, movementPower);
+
+    const creditsRow = document.createElement("div");
+    creditsRow.id = "card-credits";
+
+    const date = new Date();
+    const credits = document.createElement("div");
+    credits.style.fontSize = "8px";
+    credits.style.color = "#686868";
+    credits.textContent = `Nintendo Creatures, GAMEFREAK - ${date.getFullYear()}`;
+
+    creditsRow.appendChild(credits);
+
+    content.append(headerRow, portraitRow, movementRow, creditsRow);
+
     card.appendChild(content);
 
     return card;
-
 }
 
 (async () => {
@@ -123,3 +213,5 @@ const cardFactory = async (model) => {
 
     container.appendChild(card);
 })();
+
+
