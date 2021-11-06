@@ -1,0 +1,68 @@
+html, body {
+    height: 100%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.c-text-capitalize {
+    text-transform: capitalize;
+}
+
+.c-flex {
+    display: flex;
+}
+
+.c-row {
+    flex-direction: row;
+}
+
+.c-f-50 {
+    flex: 0 0 50%;
+}
+
+.c-f-25 {
+    flex: 0 0 25%;
+}
+
+.c-f-wrap {
+    flex-wrap: wrap;
+}
+
+.c-align-center {
+    align-items: center;
+}
+
+.c-justify-center {
+    justify-content: center;
+}
+
+.c-justify-end {
+    justify-content: end;
+}
+
+.c-h-100 {
+    height: 100%;
+}
+
+#card {
+    height: 400px;
+    width: 300px;
+    padding: 18px;
+    border-radius: 8px;
+}
+
+#card-content {
+    height: 100%;
+    width: 100%;
+    background: white;
+}
+
+#card-content > div {
+    padding: 10px;
+}
+
+#card-content img {
+    padding: 5px;
+    width: 15px;
+    border-radius: 30px;
+    margin: 0 2px;
+}
