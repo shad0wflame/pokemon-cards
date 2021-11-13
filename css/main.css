@@ -1,103 +1,111 @@
-html, body {
-    height: 100%;
-    font-family: 'Open Sans', sans-serif;
+html,
+body {
+  height: 100%;
+  font-family: "Open Sans", sans-serif;
 }
 
 body {
-    background: #f3f3f3;
+  background: #f3f3f3;
 }
-
+.sp-pos-top {
+  position: absolute;
+  top: 350px;
+}
+.sp-pos-down {
+  position: absolute;
+  top: 875px;
+}
 .c-text-capitalize {
-    text-transform: capitalize;
+  text-transform: capitalize;
 }
 
 .c-flex {
-    display: flex;
+  display: flex;
 }
 
 .c-row {
-    flex-direction: row;
+  flex-direction: row;
 }
 
 .c-col {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .c-f-10 {
-    flex: 0 0 10%;
+  flex: 0 0 10%;
 }
 
 .c-f-25 {
-    flex: 0 0 25%;
+  flex: 0 0 25%;
 }
 
 .c-f-50 {
-    flex: 0 0 50%;
+  flex: 0 0 50%;
 }
 
 .c-f-75 {
-    flex: 0 0 75%;
+  flex: 0 0 75%;
 }
 
 .c-f-wrap {
-    flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 
 .c-align-center {
-    align-items: center;
+  align-items: center;
 }
 
 .c-justify-center {
-    justify-content: center;
+  justify-content: center;
 }
 
 .c-justify-end {
-    justify-content: end;
+  justify-content: end;
 }
 
 .c-h-100 {
-    height: 100%;
+  height: 100%;
 }
 
 .c-w-100 {
-    width: 100%;
+  width: 100%;
 }
 
 #card {
-    height: 400px;
-    width: 300px;
-    padding: 18px;
-    border-radius: 8px;
-    box-shadow: 8px 8px 8px 0px #cdcdcd;
+  height: 400px;
+  width: 300px;
+  padding: 18px;
+  border-radius: 8px;
+  box-shadow: 8px 8px 8px 0px #cdcdcd;
 }
 
 #card-content {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    background: white;
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background: white;
 }
 
 #card-content > div {
-    padding: 10px;
+  padding: 10px;
 }
 
 #card-content img {
-    padding: 5px;
-    width: 15px;
-    border-radius: 30px;
-    margin: 0 2px;
+  padding: 5px;
+  width: 15px;
+  border-radius: 30px;
+  margin: 0 2px;
 }
 
 #card-header-numeric {
-    margin-right: 5px;
-    color: #686868;
+  margin-right: 5px;
+  color: #686868;
 }
 
 #card-credits {
-    width: 100%;
-    padding: 5px 0;
-    position: absolute;
-    bottom: 0;
-    text-align: center;
+  width: 100%;
+  padding: 5px 0;
+  position: absolute;
+  bottom: 0;
+  text-align: center;
 }
