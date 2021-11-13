@@ -245,7 +245,7 @@ const spriteRenderer = (model, cntainer) => {
   const container = document.getElementById("card-container");
 
   const randomId = getRandomInt(1, 151);
-  const model = await fetchPokemonAPI(`pokemon/118`);
+  const model = await fetchPokemonAPI(`pokemon/${randomId}`);
 
   const card = await cardFactory(model);
 
