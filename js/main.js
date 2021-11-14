@@ -72,7 +72,6 @@ const parsePokemon = async ({ id, name, stats, sprites, moves, types }) => {
 
 const cardFactory = async (model) => {
   const { id, name, hp, sprite, move, types } = await parsePokemon(model);
-  console.log(id, name, hp, sprite, move, types);
 
   let backgroundStyle;
   if (types.length > 1) {
@@ -202,43 +201,37 @@ const cardFactory = async (model) => {
   content.append(headerRow, portraitRow, movementRow, creditsRow);
 
   card.appendChild(content);
-
+  spriteRenderer(model);
   return card;
 };
 
-const spriteRenderer = (model, cntainer) => {
+const spriteRenderer = (model, container) => {
   const { sprites: sp } = model;
-  const sparr = Object.values(sp);
-  sparr.sort((a, b) => {
-    b - a;
-  });
+  const sprites = Object.values(sp).sort((a, b) => b - a);
 
   const rowUp = document.createElement(`div`);
-  rowUp.setAttribute(`class`, `sp-pos-top c-row c-flex c-f-wrap c-align-center c-justify-center`);
+  rowUp.setAttribute(`class`, `sp-pos-top c-row c-flex`);
   const rowDown = document.createElement(`div`);
   rowDown.setAttribute(`class`, `sp-pos-down c-row c-flex c-f-wrap c-align-center c-justify-center`);
 
-  const widthMax = cntainer.offsetWidth;
-
-  sparr.forEach((element) => {
-    if (element !== null && typeof element !== `object`) {
-      console.log(element);
-
+  sprites.forEach((element) => {
+    if (element && typeof element === `string`) {
       const img = document.createElement(`img`);
-      img.setAttribute(`id`, `sprite-${sparr.indexOf(element)}`);
+      img.setAttribute(`id`, `sprite-${sprites.indexOf(element)}`);
       img.setAttribute(`src`, `${element}`);
       const col = document.createElement(`div`);
       col.setAttribute(`class`, `c-col`);
       col.appendChild(img);
-      if (sparr.indexOf(element) % 2 === 0) {
+      if (sprites.indexOf(element) % 2 === 0) {
         rowUp.appendChild(col);
       } else {
         rowDown.appendChild(col);
       }
     }
   });
-  cntainer.parentNode.insertBefore(rowUp, cntainer);
-  cntainer.parentNode.insertBefore(rowDown, cntainer);
+
+  document.getElementById(`card-container`).appendChild(rowUp);
+  document.getElementById(`card-container`).appendChild(rowDown);
 };
 
 (async () => {
@@ -250,5 +243,4 @@ const spriteRenderer = (model, cntainer) => {
   const card = await cardFactory(model);
 
   container.appendChild(card);
-  spriteRenderer(model, card);
 })();
